@@ -1,7 +1,6 @@
 class Solution {
 public:
     int n,m;
-    int vis[101][101];
     int dx[4] = { -1, 0, 0, 1 };
     int dy[4] = { 0, -1, 1, 0 };
     bool isValid(int i,int j) {
@@ -11,16 +10,16 @@ public:
     int dfs(int i,int j,vector<vector<int>>& grid) {
         if(grid[i][j] == 0) return 0;
         int mx_gold = 0;
-        
+        int num = grid[i][j];
+        grid[i][j] = 0;
         for(int x=0;x<4;x++) {
             int nx = dx[x]+i;
             int ny = dy[x]+j;
-            if(isValid(nx,ny) and !vis[nx][ny]) {
-                vis[nx][ny] = 1;
+            if(isValid(nx,ny)) {
                 mx_gold = max(mx_gold,dfs(nx,ny,grid));
-                vis[nx][ny] = 0;
             }
         }
+        grid[i][j] = num;
         return mx_gold+grid[i][j];
     }
     int getMaximumGold(vector<vector<int>>& grid) {
@@ -32,8 +31,6 @@ public:
         for(int i=0;i<n;i++) {
             for(int j=0;j<m;j++) {
                 if(grid[i][j] != 0) {
-                    memset(&vis,0,sizeof vis);
-                    vis[i][j] = 1;
                     ans = max(ans,dfs(i,j,grid));
                 }
             }
